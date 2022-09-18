@@ -12,7 +12,7 @@ import (
 
 const (
   targetSide = uint32(0) // 0 for heads, 1 for tails
-  targetConsecutive = 15
+  targetConsecutive = 15 // amount of times to consecutively reach desired side
 )
 
 var (
@@ -29,7 +29,7 @@ var (
 func main() {
   start := time.Now()
   
-	for i := 0; i < 50; i++ {
+  for i := 0; i < 50; i++ {
     wg.Add(1)
 
     go func(min, max int64) {
