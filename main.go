@@ -13,6 +13,8 @@ import (
 const (
   targetSide = uint32(0) // 0 for heads, 1 for tails; this is stored as a uint32 due to limitations within the atomic package.
   targetConsecutive = 15 // amount of times to consecutively reach desired side
+  
+  threadCount = 50
 )
 
 var (
@@ -31,9 +33,8 @@ func main() {
   
   // Start threads.
   
-  for i := 0; i < 50; i++ {
-    wg.Add(1)
-
+  wg.Add(threadCount)
+  for i := 0; i < threadCount; i++ {
     go func(min, max int64) {
       for atomic.LoadUint64(&consecutive) < targetConsecutive {
         atomic.AddUint64(&iterations, 1)
@@ -62,9 +63,7 @@ func main() {
 
   wg.Wait()
 
-  duration := time.Since(start)
-
-  // Convert targetSide to a string, since it's stored as a uint32 (see line 14).
+  // Convert targetSide to a human-readable string, since it's stored as a uint32 (see line 14).
   
   var side string
   if targetSide == 0 {
@@ -75,11 +74,10 @@ func main() {
   
   // Print out useful (or not) stats.
   
-  fmt.Printf("Heads: %d\nTails: %d\nIterations: %d\n\n", heads, tails, iterations)
-  fmt.Printf("Target: %d (%s)\n", targetConsecutive, side)
-  fmt.Printf("Predicted %%: %.10F%%\n", 1 / math.Pow(2, targetConsecutive))
-  fmt.Printf("Actual %%: %.10F%%\n\n", 1 / float64(iterations))
-  fmt.Printf("Execution Time: %v", duration)
+  fmt.Println("Heads:", heads, "\nTails:", tails, "\nIterations:", iterations)
+  fmt.Pritnf("\nTarget: %d (%s)\n", targetConsecutive, side)
+  fmt.Printf("Predicted %%: %.10F%%\nActual %%: %.10F%%\n", 1 / math.Pow(2, targetConsecutive), 1 / float64(iterations))
+  fmt.Println("Execution Time:", time.Since(start))
 }
 
 func randInt(min, max int64) *big.Int {
