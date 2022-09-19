@@ -11,7 +11,7 @@ import (
 )
 
 const (
-  targetSide = uint32(0) // 0 for heads, 1 for tails
+  targetSide = uint32(0) // 0 for heads, 1 for tails; this is stored as a uint32 due to limitations within the atomic package.
   targetConsecutive = 15 // amount of times to consecutively reach desired side
 )
 
@@ -28,6 +28,8 @@ var (
 
 func main() {
   start := time.Now()
+  
+  // Start threads.
   
   for i := 0; i < 50; i++ {
     wg.Add(1)
@@ -62,12 +64,16 @@ func main() {
 
   duration := time.Since(start)
 
+  // Convert targetSide to a string, since it's stored as a uint32 (see line 14).
+  
   var side string
   if targetSide == 0 {
     side = "heads"
   } else {
     side = "tails"
   }
+  
+  // Print out useful (or not) stats.
   
   fmt.Printf("Heads: %d\nTails: %d\nIterations: %d\n\n", heads, tails, iterations)
   fmt.Printf("Target: %d (%s)\n", targetConsecutive, side)
