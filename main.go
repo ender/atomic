@@ -32,7 +32,6 @@ func main() {
   start := time.Now()
   
   // Start threads.
-  
   wg.Add(threadCount)
   for i := 0; i < threadCount; i++ {
     go func(min, max int64) {
@@ -64,7 +63,6 @@ func main() {
   wg.Wait()
 
   // Convert targetSide to a human-readable string, since it's stored as a uint32 (see line 14).
-  
   var side string
   if targetSide == 0 {
     side = "heads"
@@ -73,7 +71,6 @@ func main() {
   }
   
   // Print out useful (or not) stats.
-  
   fmt.Println("Heads:", heads, "\nTails:", tails, "\nIterations:", iterations)
   fmt.Pritnf("\nTarget: %d (%s)\n", targetConsecutive, side)
   fmt.Printf("Predicted %%: %.10F%%\nActual %%: %.10F%%\n", 1 / math.Pow(2, targetConsecutive), 1 / float64(iterations))
