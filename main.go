@@ -12,9 +12,9 @@ import (
 
 const (
   targetSide = uint32(0) // 0 for heads, 1 for tails; this is stored as a uint32 due to limitations within the atomic package.
-  targetConsecutive = 15 // amount of times to consecutively reach desired side
+  targetConsecutive = 15 // number of times to consecutively reach desired side
   
-  threadCount = 50
+  threadCount = 50 // number of goroutines to start
 )
 
 var (
